@@ -16,7 +16,9 @@ var (
 	choice string
 )
 
-func printOptions(options []string, selectedIndex int) {
+type Choices = []string
+
+func printOptions(options Choices, selectedIndex int) {
 	boldYellow := yellow.Add(color.Bold).Sprint
 
 
@@ -35,7 +37,7 @@ func clearScreen() {
 	fmt.Print("\033[H\033[2J") // ANSI escape sequence to clear screen
 }
 
-func DisplayChoices(options []string) {
+func DisplayChoices(options Choices) {
 	if !(len(options) > 0) {
 		log.Fatal("Options is Empty")
 	}

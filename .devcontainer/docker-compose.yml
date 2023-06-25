@@ -5,4 +5,5 @@ services:
     container_name: devcontainer_devca
     volumes:
       - ..:/workspaces:cached
+      - ~/.gitconfig:/etc/gitconfig
     command: sleep infinity
