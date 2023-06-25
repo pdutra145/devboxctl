@@ -1,0 +1,8 @@
+version: "3"
+services:
+  devcontainer:
+    image: "mcr.microsoft.com/vscode/devcontainers/go:1.17-bullseye"
+    container_name: devcontainer_devca
+    volumes:
+      - ..:/workspaces:cached
+    command: sleep infinity
