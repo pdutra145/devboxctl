@@ -33,6 +33,7 @@ func AddContainer() {
 	if !(utils.FileExists(filePath)) {
 		createFile()
 	} 
-
-	inputs.AddContainerInput()
+	var name string
+	var path string
+	inputs.AddContainerInput(&name, &path)
 }
