@@ -2,7 +2,8 @@ package commands
 
 import (
 	"devboxctl/cli"
-	"fmt"
+	"devboxctl/cli/inputs"
+	"devboxctl/utils"
 	"os"
 	"path/filepath"
 )
@@ -21,16 +22,17 @@ func createFile() {
 		return
 	}
 
+	file.WriteString("{}")
+
 	defer file.Close()
 
 	cli.Confirm.Printf("%s Successfully Created !\n", cli.Cyan.Sprint(fileName))
 }
 
 func AddContainer() {
-	_, err := os.Stat(filePath)
-	fmt.Print(err)
-
-	if os.IsNotExist(err) {
+	if !(utils.FileExists(filePath)) {
 		createFile()
-	}
+	} 
+
+	inputs.AddContainerInput()
 }

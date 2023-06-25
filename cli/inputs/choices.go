@@ -8,12 +8,14 @@ import (
 	"github.com/fatih/color"
 )
 
+type Choice string
+type Choices = map[int]Choice
+
 var (
-	choice string
+	choice Choice
 	selectedIndex int = 0
 )
 
-type Choices = []string
 
 func printOptions(options Choices, selectedIndex int) {
 	boldYellow := cli.Yellow.Add(color.Bold).Sprint
@@ -34,15 +36,10 @@ func clearScreen() {
 	fmt.Print("\033[H\033[2J") // ANSI escape sequence to clear screen
 }
 
-func DisplayChoices(options Choices) {
+func DisplayChoices(options Choices) int {
 	if !(len(options) > 0) {
 		log.Fatal("Options is Empty")
 	}
-
-	
-	Green := cli.Confirm.Sprint
-
-	
 
 	for {
 		printOptions(options, selectedIndex)
@@ -57,5 +54,5 @@ func DisplayChoices(options Choices) {
 	}
 
 
-	fmt.Printf("\n%s %s\n", Green("Selected Option: "), choice)
+	return selectedIndex
 }

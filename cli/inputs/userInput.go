@@ -1,8 +1,11 @@
 package inputs
 
 import (
+	"bufio"
 	"devboxctl/cli"
+	"fmt"
 	"log"
+	"os"
 
 	"github.com/eiannone/keyboard"
 )
@@ -45,4 +48,40 @@ func keyboardChoiceInput(options *Choices) State {
 	}
 
 	return Continue
+}
+
+func GetUserInput(message string, inputVar *string) {
+	scanner := bufio.NewScanner(os.Stdin)
+
+	cli.Cyan.Print(message)
+	scanner.Scan()
+	*inputVar = scanner.Text()
+	
+	fmt.Println()
+}
+
+func AddContainerInput() {
+	var name string
+	
+	GetUserInput("Name of Dev Container: ", &name)
+
+	cli.Cyan.Println("Specify the Path of .devcontainer")
+	choice := DisplayChoices(Choices{0:"Current Dir", 1:"Other"})
+
+	var path string
+	switch choice {
+	case 0:
+		wd, err := os.Getwd()
+
+		if err != nil {
+			log.Fatal(cli.Alert.Sprint("Error in getting current dir"))
+		}
+
+		path = wd
+	case 1:
+		GetUserInput("Enter the path: ", &path)
+	default:
+		path = ""
+	}
+
 }
