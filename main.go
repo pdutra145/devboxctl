@@ -1,12 +1,31 @@
 package main
 
 import (
-	"devbox/cli"
+	"devboxctl/cli"
+	"devboxctl/cli/commands"
+	"flag"
+
+	"log"
 )
 
 
 func main() {
-	choices := []string{"Option 1", "Option 2"}
+	flag.Parse()
 
-	cli.DisplayChoices(choices)
+	args := flag.Args()
+
+	if len(args) < 1 {
+		log.Fatal(cli.Alert.Sprint("No Command Provided"))
+	}
+
+	// choices := []string{"Option 1", "Option 2"}
+
+	command := args[0]
+
+	switch command {
+	case "add":
+		commands.AddContainer()
+	}
+
+	// cli.DisplayChoices(choices)
 }

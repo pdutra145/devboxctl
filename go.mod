@@ -1,4 +1,4 @@
-module devbox
+module devboxctl
 
 go 1.17
 
