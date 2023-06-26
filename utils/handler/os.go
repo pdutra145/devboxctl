@@ -13,15 +13,16 @@ import (
 type ContainerInfo struct {
 	Name string
 	Path string
+	Image string
 	DockerCompose string ""
 	DockerFile string ""
 }
 
 type DevContainers = []ContainerInfo
 
-type filePath = string
+type FilePath = string
 
-func FileExists(file filePath) bool {
+func FileExists(file FilePath) bool {
 	_, err := os.Stat(file)
 	if err == nil {
 		return true // File exists
@@ -32,7 +33,7 @@ func FileExists(file filePath) bool {
 	return false // Error occurred while checking file existence
 }
 
-func CreateFile(filePath string) {
+func CreateDevContainersFile(filePath string) {
 	file, err := os.Create(filePath)
 
 	if err != nil {
@@ -60,7 +61,7 @@ func CreateDir(dirPath string, mode fs.FileMode) {
 	}
 }
 
-func ReadJsonFile(filePath string) DevContainers {
+func ReadDevContainersFile(filePath string) DevContainers {
 	    // Open the JSON file
 		file, err := os.Open(filePath)
 		if err != nil {
@@ -81,22 +82,23 @@ func ReadJsonFile(filePath string) DevContainers {
 		// Unmarshal the JSON data into the struct
 		err = json.Unmarshal(content, &fileContent)
 		if err != nil {
-			log.Fatalln("Error unmarshaling JSON:", err)
+			log.Fatalln("Error decoding JSON:", err)
 		}
 	
 		return fileContent
 }
 
 func WriteJson(data []byte, path string) {
-	file, error1 := os.Create(path)
-	if error1 != nil {
-		log.Fatalln("Error opening file:", error1)
+	file, openErr := os.Create(path)
+	if openErr != nil {
+		log.Fatalln("Error opening file:", openErr)
 	}
 
 	defer file.Close()
 
-	_, err := file.Write(data)
-	if err != nil {
-		log.Fatalln("Error writing to file:", err)
+	_, fileErr := file.Write(data)
+	if fileErr != nil {
+		log.Fatalln("Error writing to file:", fileErr)
 	}
 }
+

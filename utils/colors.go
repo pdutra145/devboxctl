@@ -7,4 +7,5 @@ var (
 	Special *color.Color = color.New(color.FgCyan)
 	Warning *color.Color = color.New(color.FgYellow)
 	Success *color.Color = color.New(color.FgGreen, color.Bold)
+	Normal *color.Color = color.New(color.FgWhite)
 )

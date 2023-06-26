@@ -11,7 +11,7 @@ func AddContainerInput(info *handler.ContainerInfo) {
 	name := GetUserInput("Name of Dev Container: ")
 	info.Name = name
 
-	utils.Special.Println("Specify the Path of .devcontainer")
+	utils.Normal.Println("Specify the Path of .devcontainer")
 	choice := DisplayChoices(Choices{0:"Current Dir", 1:"Other"})
 
 	switch choice {
@@ -30,4 +30,5 @@ func AddContainerInput(info *handler.ContainerInfo) {
 		info.Path = ""
 	}
 
+	info.Image = GetUserInput("Enter the devcontainer Image: ")
 }

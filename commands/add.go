@@ -10,7 +10,6 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 )
 
@@ -39,7 +38,7 @@ func init() {
 
 	currDir := wd
 	devContainersName := "devcontainers.json"
-	devContainersDir := "settings/data"
+	devContainersDir := "data"
 
 	devContainersPath = filepath.Join(currDir, devContainersDir, devContainersName)
 
@@ -47,15 +46,13 @@ func init() {
 }
 
 func AddContainer() handler.ContainerInfo {
-	boldGreen := utils.Success.Add(color.Bold)
-
 	if !(handler.FileExists(devContainersPath)) {
-		handler.CreateFile(devContainersPath)
+		handler.CreateDevContainersFile(devContainersPath)
 	} 
 	var info handler.ContainerInfo
 	inputs.AddContainerInput(&info)
 
-	content := handler.ReadJsonFile(devContainersPath)
+	content := handler.ReadDevContainersFile(devContainersPath)
 	
 	content = append(content, info)
 	fmt.Println(content)
@@ -68,7 +65,7 @@ func AddContainer() handler.ContainerInfo {
 
 	handler.WriteJson(contentJson, devContainersPath)
 
-	boldGreen.Println("Content added to devcontainers.json")
+	utils.Success.Println("Content added to devcontainers.json")
 
 	return info
 }
@@ -80,18 +77,14 @@ func AddCreateContainer() {
 
 	handler.CreateDir(dirPath, os.ModePerm)
 
-	createCompose := inputs.GetBooleanUserInput("Do you want to configure docker-compose.yml file ? ")
+	var filePath string
 
-	if createCompose {
-		filePath := filepath.Join(dirPath, "docker-compose.yml")
-		handler.CreateFile(filePath)
-	}
+	filePath = filepath.Join(dirPath, "docker-compose.yml")
+	handler.CreateDockerComposeFile(filePath)
+	
 
-	createDockerFile := inputs.GetBooleanUserInput("Do you want to configure a Dockerfile ? ")
-
-	if createDockerFile {
-		filePath := filepath.Join(dirPath, "Dockerfile")
-		handler.CreateFile(filePath)
-	}
+	filePath = filepath.Join(dirPath, "Dockerfile")
+	handler.CreateDevContainersFile(filePath)
+	
 }
 

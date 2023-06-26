@@ -1,0 +1,12 @@
+version: "3"
+services:
+  devcontainer:
+    build: 
+      dockerfile: Dockerfile
+    container_name: ${CONTAINER_NAME}
+    volumes:
+      - ..:/workspaces:cached
+      - ~/.gitconfig:/etc/gitconfig
+    command: sleep infinity
+    env_file:
+      - .env
