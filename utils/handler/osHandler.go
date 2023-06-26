@@ -1,11 +1,13 @@
-package utils
+package handler
 
 import (
-	"devboxctl/cli"
+	"devboxctl/utils"
 	"encoding/json"
 	"io"
+	"io/fs"
 	"log"
 	"os"
+	"strings"
 )
 
 type ContainerInfo struct {
@@ -17,11 +19,24 @@ type ContainerInfo struct {
 
 type DevContainers = []ContainerInfo
 
-func CreateFile(path string, name string) {
-	file, err := os.Create(path)
+type filePath = string
+
+func FileExists(file filePath) bool {
+	_, err := os.Stat(file)
+	if err == nil {
+		return true // File exists
+	}
+	if os.IsNotExist(err) {
+		return false // File does not exist
+	}
+	return false // Error occurred while checking file existence
+}
+
+func CreateFile(filePath string) {
+	file, err := os.Create(filePath)
 
 	if err != nil {
-		cli.Alert.Println("An error occured when trying to create file")
+		utils.Alert.Println("An error occured when trying to create file")
 		return
 	}
 
@@ -29,7 +44,20 @@ func CreateFile(path string, name string) {
 
 	defer file.Close()
 
-	cli.Confirm.Printf("%s Successfully Created !\n", cli.Cyan.Sprint(name))
+	parts := strings.Split(filePath, "/")
+
+	name := parts[len(parts)-1] 
+
+	utils.Success.Printf("%s Successfully Created !\n", utils.Special.Sprint(name))
+}
+
+func CreateDir(dirPath string, mode fs.FileMode) {
+
+	err := os.MkdirAll(dirPath, mode)
+
+	if err != nil {
+		Fatal("Unable to create Directory", err)
+	}
 }
 
 func ReadJsonFile(filePath string) DevContainers {

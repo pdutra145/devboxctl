@@ -1,17 +1,17 @@
 package inputs
 
 import (
-	"devboxctl/cli"
 	"devboxctl/utils"
+	"devboxctl/utils/handler"
 	"log"
 	"os"
 )
 
-func AddContainerInput(info *utils.ContainerInfo) {
+func AddContainerInput(info *handler.ContainerInfo) {
 	name := GetUserInput("Name of Dev Container: ")
 	info.Name = name
 
-	cli.Cyan.Println("Specify the Path of .devcontainer")
+	utils.Special.Println("Specify the Path of .devcontainer")
 	choice := DisplayChoices(Choices{0:"Current Dir", 1:"Other"})
 
 	switch choice {
@@ -19,7 +19,7 @@ func AddContainerInput(info *utils.ContainerInfo) {
 		wd, err := os.Getwd()
 
 		if err != nil {
-			log.Fatal(cli.Alert.Sprint("Error in getting current dir"))
+			log.Fatal(utils.Alert.Sprint("Error in getting current dir"))
 		}
 
 		info.Path = wd

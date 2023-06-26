@@ -1,2 +1,2 @@
 # Dev Container Administrator
-- A simple CLI tool that allows you to manage your dev containers
+- A simple utils tool that allows you to manage your dev containers

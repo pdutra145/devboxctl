@@ -1,13 +1,11 @@
 package inputs
 
 import (
-	"devboxctl/cli"
 	"devboxctl/utils"
 	"fmt"
 	"log"
 
 	"github.com/eiannone/keyboard"
-	"github.com/fatih/color"
 )
 
 type Choice string
@@ -19,15 +17,11 @@ var (
 
 
 func printOptions(options Choices, selectedIndex int) {
-	boldYellow := cli.Yellow.Add(color.Bold).Sprint
-	cyan := cli.Cyan
-
-
-	cyan.Printf("Use the arrow keys to select an option %s", boldYellow("(Press Enter to confirm):\n"))
+	utils.Special.Printf("Use the arrow keys to select an option %s", utils.Warning.Sprint("(Press Enter to Success):\n"))
 
 	for i, option := range options {
 		if i == selectedIndex {
-			fmt.Printf("%s %s\n", cyan.Sprint(">"), option)
+			fmt.Printf("%s %s\n", utils.Special.Sprint(">"), option)
 		} else {
 			fmt.Println(option)
 		}
@@ -86,7 +80,7 @@ func keyboardChoiceInput(options *Choices) State {
 	}
 
 	if char == 'q' || char == 'Q' {
-		cli.Alert.Println("Exiting...")
+		utils.Alert.Println("Exiting...")
 		return Exit
 	}
 
