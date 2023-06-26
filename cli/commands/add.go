@@ -4,36 +4,75 @@ import (
 	"devboxctl/cli"
 	"devboxctl/cli/inputs"
 	"devboxctl/utils"
+	"encoding/json"
+	"fmt"
+	"log"
 	"os"
 	"path/filepath"
+
+	"github.com/fatih/color"
 )
 
 var (
-	fileName string = "devcontainers.json"
-	fileDir string = "settings/data"
-	filePath string = filepath.Join(fileDir, fileName)
+	devContainersName string = "devcontainers.json"
+	devContainersDir string = "settings/data"
+	currDir string
+	devContainersPath string
 )
 
-func createFile() {
+func init() {
+	wd, err := os.Getwd()
+
+	if err != nil {
+		log.Fatalln(cli.Alert.Sprint("Unable to get Working Dir"))
+	}
+
+	currDir = wd
+
+	devContainersPath = filepath.Join(currDir, devContainersDir, devContainersName)
+}
+
+
+
+func AddContainer() utils.ContainerInfo {
+	boldGreen := cli.Confirm.Add(color.Bold)
+
+	if !(utils.FileExists(devContainersPath)) {
+		utils.CreateFile(devContainersPath, devContainersName)
+	} 
+	var info utils.ContainerInfo
+	inputs.AddContainerInput(&info)
+
+	content := utils.ReadJsonFile(devContainersPath)
+	
+	content = append(content, info)
+	fmt.Println(content)
+
+	contentJson, err := json.Marshal(content)
+
+	if err != nil {
+		log.Fatalln(cli.Alert.Sprint("Error in converting to Json"))
+	}
+
+	utils.WriteJson(contentJson, devContainersPath)
+
+	boldGreen.Println("Content added to devcontainers.json")
+
+	return info
+}
+
+func AddCreateContainer() {
+	info := AddContainer()
+
+	filePath := filepath.Join(info.Path, ".devcontainer")
+
 	file, err := os.Create(filePath)
 
 	if err != nil {
-		cli.Alert.Println("An error occured when trying to create file")
-		return
+		log.Fatalln(cli.Alert.Sprint("Error in creating the .devcontainers folder"))
 	}
-
-	file.WriteString("{}")
 
 	defer file.Close()
 
-	cli.Confirm.Printf("%s Successfully Created !\n", cli.Cyan.Sprint(fileName))
-}
 
-func AddContainer() {
-	if !(utils.FileExists(filePath)) {
-		createFile()
-	} 
-	var name string
-	var path string
-	inputs.AddContainerInput(&name, &path)
 }

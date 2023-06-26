@@ -7,15 +7,17 @@ import (
 	"os"
 )
 
+type UserResponse = string
 
-
-func GetUserInput(message string, inputVar *string) {
+func GetUserInput(message string) UserResponse {
+	var response UserResponse
 	scanner := bufio.NewScanner(os.Stdin)
 
 	cli.Cyan.Print(message)
 	scanner.Scan()
-	*inputVar = scanner.Text()
+	response = scanner.Text()
 
 	fmt.Println()
+	return response
 }
 
