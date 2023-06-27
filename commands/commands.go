@@ -1,6 +1,13 @@
 package commands
 
+/*
+All the Commands of the Devboxctl are imported and added here
+*/
+
 import (
+	add "devboxctl/commands/add"
+	container "devboxctl/commands/container"
+
 	"github.com/spf13/cobra"
 )
 
@@ -10,5 +17,6 @@ var App *cobra.Command = &cobra.Command{
 }
 
 func init() {
-	App.AddCommand(Add)
+	App.AddCommand(add.Add)
+	App.AddCommand(container.Container)
 }
