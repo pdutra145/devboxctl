@@ -7,9 +7,19 @@ import (
 	"os"
 )
 
-func ReadDevContainersFile(filePath string) DevContainers {
+type ContainerInfo struct {
+	Name string
+	Path string
+	Image string
+	DockerCompose string ""
+	DockerFile string ""
+}
+
+type DevContainers = []ContainerInfo
+
+func ReadDevContainersFile() DevContainers {
 	// Open the JSON file
-	file, err := os.Open(filePath)
+	file, err := os.Open("data/devcontainers.json")
 	if err != nil {
 		log.Fatalln("Error opening file:", err)
 	}

@@ -8,15 +8,7 @@ import (
 	"strings"
 )
 
-type ContainerInfo struct {
-	Name string
-	Path string
-	Image string
-	DockerCompose string ""
-	DockerFile string ""
-}
 
-type DevContainers = []ContainerInfo
 
 type FilePath = string
 
@@ -75,7 +67,7 @@ func WriteJson(data []byte, path string) {
 }
 
 func AppendToJson(path FilePath, info *ContainerInfo) []ContainerInfo {
-	content := ReadDevContainersFile(path)
+	content := ReadDevContainersFile()
 	
 	content = append(content, *info)
 	return content
