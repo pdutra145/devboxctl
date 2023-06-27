@@ -3,6 +3,7 @@ package handler
 import (
 	"devboxctl/utils"
 	"encoding/json"
+	"fmt"
 	"io"
 	"os"
 )
@@ -49,7 +50,11 @@ func CreateDevContainerFile(filePath FilePath, info ContainerInfo) {
 
 	defer file.Close()
 
-	WriteJson(data, filePath)
+	_, err = file.Write(data)
+
+	if err != nil {
+		Fatal("Unable to write to devcontainer.json", err)
+	}
 }
 
 func CreateDockerComposeFile(filePath FilePath) {
@@ -77,4 +82,40 @@ func CreateDockerComposeFile(filePath FilePath) {
 	}
 
 	utils.Success.Println("Docker Compose file Created Successfully")
+}
+
+func CreateDockerFile(filePath FilePath, info ContainerInfo) {
+	file, err := os.Create(filePath)
+
+	if err != nil {
+		Fatal("Unable to create Dockerfile", err)
+	}
+
+	defer file.Close()
+
+	_, err = file.WriteString(fmt.Sprintf("FROM %s", info.Image))
+
+	if err != nil {
+		Fatal("Unable to write to Dockerfile", err)
+	}
+
+	utils.Success.Println("Dockerfile Successfully Created")
+}
+
+func CreateEnvFile(filePath FilePath, info ContainerInfo) {
+	file, err := os.Create(filePath)
+
+	if err != nil {
+		Fatal("Unable to Create Env file", err)
+	}
+
+	defer file.Close()
+
+	_, err = file.WriteString(fmt.Sprintf("CONTAINER_NAME=%s", info.Name))
+	
+	if err != nil {
+		Fatal("Unable to Write to Env File", err)
+	}
+
+	utils.Success.Println("Env file Successfully Created!")
 }

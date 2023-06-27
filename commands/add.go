@@ -5,7 +5,6 @@ import (
 	"devboxctl/utils"
 	"devboxctl/utils/handler"
 	"encoding/json"
-	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -16,8 +15,9 @@ import (
 func run(cmd *cobra.Command, args []string) {
 	if cmd.Flags().Changed("new") {
 		AddCreateContainer()
+	} else {
+		AddContainer()
 	}
-	AddContainer()
 }
 
 var (
@@ -42,7 +42,7 @@ func init() {
 
 	devContainersPath = filepath.Join(currDir, devContainersDir, devContainersName)
 
-	Add.Flags().StringP("new", "n", "", "add to devcontainers.json and setup the devcontainer")
+	Add.Flags().BoolP("new", "n", false, "add to devcontainers.json and setup the devcontainer")
 }
 
 func AddContainer() handler.ContainerInfo {
@@ -52,10 +52,7 @@ func AddContainer() handler.ContainerInfo {
 	var info handler.ContainerInfo
 	inputs.AddContainerInput(&info)
 
-	content := handler.ReadDevContainersFile(devContainersPath)
-	
-	content = append(content, info)
-	fmt.Println(content)
+	content := handler.AppendToJson(devContainersPath, &info)
 
 	contentJson, err := json.Marshal(content)
 
@@ -84,7 +81,14 @@ func AddCreateContainer() {
 	
 
 	filePath = filepath.Join(dirPath, "Dockerfile")
-	handler.CreateDevContainersFile(filePath)
-	
+	handler.CreateDockerFile(filePath, info)
+
+	filePath = filepath.Join(dirPath, "devcontainer.json")
+	handler.CreateDevContainerFile(filePath, info)
+
+	filePath = filepath.Join(dirPath, ".env")
+	handler.CreateEnvFile(filePath, info)
+
+	utils.Special.Printf("\nDev container ready to use in %s\n", utils.Normal.Sprint(dirPath))
 }
 

@@ -102,3 +102,9 @@ func WriteJson(data []byte, path string) {
 	}
 }
 
+func AppendToJson(path FilePath, info *ContainerInfo) []ContainerInfo {
+	content := ReadDevContainersFile(path)
+	
+	content = append(content, *info)
+	return content
+}
