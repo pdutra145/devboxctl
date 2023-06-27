@@ -1,8 +1,8 @@
 package inputs
 
 import (
+	"devboxctl/handler"
 	"devboxctl/utils"
-	"devboxctl/utils/handler"
 	"log"
 	"os"
 )

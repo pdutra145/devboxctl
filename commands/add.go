@@ -1,9 +1,9 @@
 package commands
 
 import (
+	"devboxctl/handler"
 	"devboxctl/inputs"
 	"devboxctl/utils"
-	"devboxctl/utils/handler"
 	"encoding/json"
 	"log"
 	"os"
@@ -84,11 +84,10 @@ func AddCreateContainer() {
 	handler.CreateDockerFile(filePath, info)
 
 	filePath = filepath.Join(dirPath, "devcontainer.json")
-	handler.CreateDevContainerFile(filePath, info)
+	handler.CreateDevContainerFile(filePath, &info)
 
 	filePath = filepath.Join(dirPath, ".env")
 	handler.CreateEnvFile(filePath, info)
 
 	utils.Special.Printf("\nDev container ready to use in %s\n", utils.Normal.Sprint(dirPath))
 }
-

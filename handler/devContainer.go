@@ -13,11 +13,11 @@ type DevContainerJSON interface {
 }
 
 type DevContainer struct {
-	name string
-	dockerComposeFile string
-	service string
-	workspaceFolder string
-	shutdownAction string 
+	Name string `json:"name"`
+	DockerComposeFile string `json:"dockerComposeFile"`
+	Service string `json:"service"`
+	WorkspaceFolder string `json:"workspaceFolder"`
+	ShutdownAction string  `json:"shutdownAction"`
 }
 
 func (c *DevContainer) Marshal() []byte {
@@ -31,13 +31,13 @@ func (c *DevContainer) Marshal() []byte {
 }
 
 
-func CreateDevContainerFile(filePath FilePath, info ContainerInfo) {
+func CreateDevContainerFile(filePath FilePath, info *ContainerInfo) {
 	var jsonInfo DevContainerJSON = &DevContainer{
-		name: info.Name,
-		dockerComposeFile: info.DockerCompose,
-		service: "devcontainer",
-		workspaceFolder: "/workspace",
-		shutdownAction: "stopCompose",
+		Name: info.Name,
+		DockerComposeFile: info.DockerCompose,
+		Service: "devcontainer",
+		WorkspaceFolder: "/workspace",
+		ShutdownAction: "stopCompose",
 	}
 
 	data := jsonInfo.Marshal()

@@ -2,7 +2,7 @@ package main
 
 import (
 	"devboxctl/commands"
-	"devboxctl/utils/handler"
+	"devboxctl/handler"
 )
 
 func main() {
